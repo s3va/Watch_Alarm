@@ -1,0 +1,68 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory app:title="Telegram settings">
+
+        <EditTextPreference  app:title="Telegram Key"
+            app:defaultValue="123456:alsdkfjalskdjflskjflskj"
+            android:inputType="text"
+            app:key="@string/telegram_key"
+            android:selectAllOnFocus="true"
+            app:singleLine="true"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference app:title="Chat ID"
+            android:defaultValue="@string/defnumforchid"
+            android:inputType="text"
+            android:key="@string/telegram_chat_id"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference app:title="Threshold"
+            android:defaultValue="0.5E-01"
+            android:inputType="number"
+            android:key="accel_threshold"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:useSimpleSummaryProvider="true"
+            />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/messages_header">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/signature_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="reply"
+            app:title="@string/reply_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/sync_title" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sync"
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="@string/attachment_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
