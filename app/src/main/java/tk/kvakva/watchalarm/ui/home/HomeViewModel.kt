@@ -18,6 +18,7 @@ import tk.kvakva.watchalarm.R
 import java.io.IOException
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 
@@ -33,31 +34,17 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
     }
     val text: LiveData<String> = _text*/
 
-    private var mSensorLiAc: Sensor? = null
-    private var mSensorGrav: Sensor? = null
     private var mSensorAcce: Sensor? = null
 
     private val _accelx0 = MutableLiveData<Float>()
     private val _accely0 = MutableLiveData<Float>()
     private val _accelz0 = MutableLiveData<Float>()
-    private val _acclix0 = MutableLiveData<Float>()
-    private val _accliy0 = MutableLiveData<Float>()
-    private val _accliz0 = MutableLiveData<Float>()
-    private val _gravix0 = MutableLiveData<Float>()
-    private val _graviy0 = MutableLiveData<Float>()
-    private val _graviz0 = MutableLiveData<Float>()
+    private val _accelq0 = MutableLiveData<Float>()
 
     val accelx0: LiveData<Float> = _accelx0
     val accely0: LiveData<Float> = _accely0
     val accelz0: LiveData<Float> = _accelz0
-
-    val acclix0: LiveData<Float> = _acclix0
-    val accliy0: LiveData<Float> = _accliy0
-    val accliz0: LiveData<Float> = _accliz0
-
-    val gravix0: LiveData<Float> = _gravix0
-    val graviy0: LiveData<Float> = _graviy0
-    val graviz0: LiveData<Float> = _graviz0
+    val accelq0: LiveData<Float> = _accelq0
 
     private val _secondprogress = MutableLiveData<Int>()
     private val _peak = MutableLiveData<Float>()
@@ -70,30 +57,6 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
     val lastanounce: LiveData<Long> = _lastanounce
 
     init {
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY) != null) {
-            val gravSensors: List<Sensor> = sensorManager.getSensorList(Sensor.TYPE_GRAVITY)
-            Log.v(TAG, "list of gravity sensors: ${gravSensors.joinToString()}")
-            // Use the version 3 gravity sensor.
-            mSensorGrav = gravSensors.firstOrNull()
-            Log.v(
-                TAG,
-                "mSensorGrav: ${mSensorGrav?.name} ${mSensorGrav?.vendor} ${mSensorGrav.toString()}"
-            )
-        } else {
-            Log.v(TAG, "There is no Gravity sensors")
-        }
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
-            val accelSensors: List<Sensor> =
-                sensorManager.getSensorList(Sensor.TYPE_LINEAR_ACCELERATION)
-            Log.v(TAG, "list of sensors: ${accelSensors.joinToString()}")
-            mSensorLiAc = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
-            Log.v(
-                TAG,
-                "mSensorLiAc: ${mSensorLiAc?.name} ${mSensorLiAc?.vendor} ${mSensorLiAc.toString()}"
-            )
-        } else {
-            Log.v(TAG, "There is no Linear acceleration sensors")
-        }
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             val accelSensors: List<Sensor> = sensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER)
             Log.v(TAG, "list of accel sensors: ${accelSensors.joinToString()}")
@@ -106,18 +69,7 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
             Log.v(TAG, "There is no accelerometers")
         }
 
-
-
-
-
-
-        mSensorLiAc?.also {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
         mSensorAcce?.also {
-            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
-        }
-        mSensorGrav?.also {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
 
@@ -131,18 +83,18 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
     val sp = PreferenceManager.getDefaultSharedPreferences(appl.applicationContext)
 
     init {
-        _threshold.value = sp.getString("accel_threshold", "0.5E0")?.toFloat()
+        _threshold.value = sp.getString(appl.resources.getString(R.string.accel_threshold), "0.5111")?.toFloat()
         seekbarprogress.postValue(
             sqrt(
                 (threshold.value?.times(10000) ?: 0).toFloat()
-                    .div((mSensorLiAc?.maximumRange ?: 0).toFloat())
+                    .div((mSensorAcce?.maximumRange ?: 0).toFloat())
             ).toInt()
         )
     }
 
 
     fun seekbarprogresstothreshold(i: Int) {
-        _threshold.value = i * i * (mSensorLiAc?.maximumRange?.div(10000) ?: 0).toFloat()
+        _threshold.value = i * i * (mSensorAcce?.maximumRange?.div(10000) ?: 0).toFloat()
         with(sp.edit()) {
             putString("accel_threshold", _threshold.value.toString())
             apply()
@@ -180,39 +132,20 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
                     accel = it
                 }
 
-                /*event?.values?.get(0).let { _accelx0.value = it }
-                event?.values?.get(1).let { _accely0.value = it }
-                event?.values?.get(2).let { _accelz0.value = it }*/
-            }
-            mSensorGrav -> {
                 event?.values?.let {
-                    grav = it
-                }
+                    _accelx0.value = it[0]
+                    _accely0.value = it[1]
+                    _accelz0.value = it[2]
+                    _accelq0.value = sqrt(it[0].pow(2)+it[1].pow(2)+it[2].pow(2))
 
-                /*event?.values?.get(0).let { _gravix0.value = it }
-                event?.values?.get(1).let { _graviy0.value = it }
-                event?.values?.get(2).let { _graviz0.value = it }*/
-            }
-            mSensorLiAc -> {
-                event?.values?.let {
                     threshold.value?.let { thrsh ->
-                        _peak.value = maxOf(abs(it[0]), abs(it[1]), abs(it[2]))
+                        _peak.value = maxOf(peak.value?:0f,accelq0.value?:0f)
                         _secondprogress.value = sqrt(
                             (peak.value?.times(10000) ?: 0).toFloat()
-                                .div((mSensorLiAc?.maximumRange ?: 0).toFloat())
+                                .div((mSensorAcce?.maximumRange ?: 0).toFloat())
                         ).toInt()
-                        if (maxOf(abs(it[0]), abs(it[1]), abs(it[2])) >= thrsh) {
-                            _acclix0.value = it[0]
-                            _accliy0.value = it[1]
-                            _accliz0.value = it[2]
 
-                            _accelx0.value = accel?.get(0)
-                            _accely0.value = accel?.get(1)
-                            _accelz0.value = accel?.get(2)
-
-                            _gravix0.value = grav?.get(0)
-                            _graviy0.value = grav?.get(1)
-                            _graviz0.value = grav?.get(2)
+                        if (accelq0.value!! >= thrsh) {
 
                             if (Date().time.minus(lastanounce.value!!) > 1000 * 20 * 1) {
                                 _lastanounce.value = Date().time
@@ -235,17 +168,15 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
                                             appl.resources.getString(
                                                 R.string.telegram_key
                                             ), "qwer"
-                                        ) + "/sendMessage?chat_id=" + sp.getString(appl.resources.getString(R.string.telegram_chat_id),"123123") + "&text=!!!!!"
+                                        ) + "/sendMessage?chat_id=" + sp.getString(
+                                            appl.resources.getString(
+                                                R.string.telegram_chat_id
+                                            ), "123123"
+                                        ) + "&text=!!!!!"
                                     )
                                     .build()
 
                                 client.newCall(request).enqueue(object : Callback {
-
-                                    /*if(it.isSuccessful){
-                                        Toast.makeText(appl.applicationContext,JSONObject(it.body!!.string()).toString(4),Toast.LENGTH_LONG).show()
-                                    }else{
-                                        Toast.makeText(appl.applicationContext,"Some Errors",Toast.LENGTH_LONG).show()
-                                    }*/
 
                                     /**
                                      * Called when the request could not be executed due to cancellation, a connectivity problem or
@@ -276,7 +207,8 @@ class HomeViewModel(private val appl: Application) : AndroidViewModel(appl), Sen
                                         response.use {
                                             if (it.isSuccessful) {
                                                 val s = JSONObject(
-                                                    it.body?.string().orEmpty() //peekBody(2048).string().orEmpty()
+                                                    it.body?.string()
+                                                        .orEmpty() //peekBody(2048).string().orEmpty()
                                                 ).toString(4)
                                                 Handler(Looper.getMainLooper()).post {
                                                     Toast.makeText(

@@ -28,4 +28,7 @@
     <string name="defnumforchid">-123234234234234</string>
     <string name="telegram_key">telegram_key</string>
     <string name="telegram_chat_id">telegram_chat_id</string>
+    <string name="gravity">gravity</string>
+    <string name="accel_threshold">accel_threshold</string>
+    <string name="notification_interval">notification_interval</string>
 </resources>

@@ -23,9 +23,27 @@
             />
 
         <EditTextPreference app:title="Threshold"
-            android:defaultValue="0.5E-01"
-            android:inputType="number"
-            android:key="accel_threshold"
+            android:defaultValue="0.7"
+            android:inputType="numberDecimal"
+            android:key="@string/accel_threshold"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference app:title="Gravity"
+            android:defaultValue="10.5"
+            android:inputType="numberDecimal"
+            android:key="@string/gravity"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            app:useSimpleSummaryProvider="true"
+            />
+
+        <EditTextPreference app:title="Notification Interval (seconds)"
+            android:defaultValue="30"
+            android:inputType="numberDecimal"
+            android:key="@string/notification_interval"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             app:useSimpleSummaryProvider="true"

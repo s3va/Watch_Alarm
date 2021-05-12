@@ -15,36 +15,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <TextView
-            android:id="@+id/aclix0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`Acc l X: ` + home.acclix0.toString()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="0.123123" />
-
-        <TextView
-            android:id="@+id/acliy0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`Acc l Y: ` + home.accliy0.toString()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/aclix0tv"
-            tools:text="0.123123" />
-
-        <TextView
-            android:id="@+id/acliz0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`Acc l Z: ` + home.accliz0.toString()}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/acliy0tv"
-            tools:text="0.123123" />
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
             android:layout_width="wrap_content"
@@ -53,75 +23,40 @@
             app:layout_constraintGuide_percent=".5" />
 
         <TextView
-            android:id="@+id/grx0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`GRAVITY X:` + home.gravix0.toString()}"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="0.123123"/>
-
-        <TextView
-            android:id="@+id/gry0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`GRAVITY Y:` + home.graviy0.toString()}"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/grx0tv"
-            tools:text="0.123123"/>
-
-        <TextView
-            android:id="@+id/grz0tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@{`GRAVITY Z:` + home.graviz0.toString()}"
-            app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/gry0tv"
-            tools:text="0.123123"/>
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barier01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="acliz0tv, grz0tv,gry0tv,acliy0tv"
-            tools:layout_editor_absoluteX="373dp"
-            tools:layout_editor_absoluteY="39dp" />
-
-        <TextView
             android:id="@+id/accelx0tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
             android:text="@{`ACCEL X:` + home.accelx0.toString()}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/barier01"
-            tools:text="0.123123"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.123123" />
 
         <TextView
             android:id="@+id/accely0tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
             android:text="@{`ACCEL Y:` + home.accely0.toString()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accelx0tv"
-            tools:text="0.123123"/>
+            tools:text="0.123123" />
 
         <TextView
             android:id="@+id/accelz0tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
             android:text="@{`ACCEL Z:` + home.accelz0.toString()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accely0tv"
-            tools:text="0.123123"/>
+            tools:text="0.123123" />
 
         <SeekBar
             android:id="@+id/seekBar"
@@ -133,10 +68,37 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:progress="@={home.seekbarprogress}"
-            android:secondaryProgress="@{home.secondprogress}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accelz0tv" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:progress="@{home.secondprogress}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+        <TextView
+            android:id="@+id/accelqtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:text="@{`ACCEL Q:` + home.accelq0.toString()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar"
+            tools:text="AccelQ: 0.123123" />
 
         <TextView
             android:id="@+id/thresholdTv"
@@ -147,7 +109,7 @@
             android:layout_marginTop="24dp"
             android:text="@{`Threshhold: ` + home.threshold.toString()}"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/grz0tv"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Threshold: 1.00" />
 
         <TextView
@@ -178,10 +140,13 @@
             android:id="@+id/secondseekTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
             android:text="@{`SS: ` + home.secondprogress}"
             app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="SS: 100" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
